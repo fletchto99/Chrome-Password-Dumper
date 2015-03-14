@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.matt.chrome.acc.Application;
 import me.matt.chrome.acc.exception.ChromeNotFoundException;
 import me.matt.chrome.acc.exception.DatabaseConnectionException;
 import me.matt.chrome.acc.exception.DatabaseReadException;
@@ -100,17 +99,12 @@ public class Dumper {
 
         }
 
-        String location = Application.class.getProtectionDomain()
-                .getCodeSource().getLocation().toString().replace("%20", " ")
-                .replace("file:", "").replace("/", File.separator);
-        String main = location.substring(0, location.lastIndexOf('/') + 1)
-                + "Accounts";
-
+        String pathToSave = OperatingSystem.getOperatingsystem().getSavePath();
         HashMap<File, ChromeAccount[]> accounts = new HashMap<File, ChromeAccount[]>();
         for (ChromeProfile profile : profiles) {
             File loginData = new File(chromeInstall.toString() + File.separator
                     + profile.getPath(), "Login Data");
-            accounts.put(new File(main, "Accounts - " + profile.getName()
+            accounts.put(new File(pathToSave, "Accounts - " + profile.getName()
                     + ".txt"), readDatabase(loginData));
         }
         if (profiles.size() < 1) {
