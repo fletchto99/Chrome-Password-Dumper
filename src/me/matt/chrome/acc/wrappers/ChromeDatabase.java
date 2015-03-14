@@ -87,8 +87,8 @@ public class ChromeDatabase {
                                     .getBytes("password_value"));
                             break;
                         case MAC:
-                            password = ChromeSecurity
-                                    .getOSXKeychainPassword(address);
+                            password = ChromeSecurity.getOSXKeychainPassword(
+                                    address, username);
                             break;
                         default:
                             throw new UnsupportedOperatingSystemException(
