@@ -8,9 +8,10 @@ public enum OperatingSystem {
             + "AppData\\Local\\Google\\Chrome\\User Data\\"), MAC(System
             .getProperty("user.home")
             + File.separator
-            + "Library/Application Support/Google/Chrome/"), LINUX(
-            System.getProperty("user.home") + File.separator
-                    + ".config/google-chrome/"), UNKNOWN("");
+            + "Library/Application Support/Google/Chrome/"), LINUX(System
+            .getProperty("user.home")
+            + File.separator
+            + ".config/google-chrome/"), UNKNOWN("");
 
     OperatingSystem(String path) {
         this.path = path;

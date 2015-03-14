@@ -1,18 +1,15 @@
 package me.matt.chrome.acc.wrappers;
 
-import com.sun.jna.platform.win32.Crypt32Util;
-
 public class ChromeAccount {
 
     private String username;
     private String URL;
-    private String decryptedPassword;
+    private String password;
 
-    public ChromeAccount(String username, byte[] encryptedPassword, String URL) {
+    public ChromeAccount(String username, String password, String URL) {
         this.username = username;
         this.URL = URL;
-        this.decryptedPassword = new String(
-                Crypt32Util.cryptUnprotectData(encryptedPassword));// TODO: Figure out mac encryption
+        this.password = password;// TODO: Figure out mac encryption
     }
 
     public String getUsername() {
@@ -24,7 +21,7 @@ public class ChromeAccount {
     }
 
     public String getPassword() {
-        return decryptedPassword;
+        return password;
     }
 
 }

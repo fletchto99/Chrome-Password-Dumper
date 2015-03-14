@@ -108,8 +108,6 @@ public class Dumper {
 
         HashMap<File, ChromeAccount[]> accounts = new HashMap<File, ChromeAccount[]>();
         for (ChromeProfile profile : profiles) {
-            System.out.println("Profile Path: " + profile.getPath());
-            System.out.println("Profile Name: " + profile.getName());
             File loginData = new File(chromeInstall.toString() + File.separator
                     + profile.getPath(), "Login Data");
             accounts.put(new File(main, "Accounts - " + profile.getName()
@@ -126,11 +124,11 @@ public class Dumper {
         int id = 0;
         for (String line : infoLines) {
             line = line.trim();
-            if (line.startsWith(",\"Profile ") || line.contains("\"Default\":")) {//TODO: Find a way to parse for every os
+            if (line.startsWith(",\"Profile ") || line.contains("\"Default\":")) {
                 id++;
             }
-            if (line.contains("\"name\":") && id > profiles.size()) { //TODO: Does this still work on windows?
-                int nameIndex = line.indexOf("\"name\":") + 8;
+            if (line.contains("\"name\":") && id > profiles.size()) {
+                int nameIndex = line.indexOf("\"name\":") + 9;
                 int lastIndex = line.indexOf("\"", nameIndex);
                 profiles.add(new ChromeProfile(id - 1, line.substring(
                         nameIndex, lastIndex)));
@@ -140,7 +138,8 @@ public class Dumper {
     }
 
     private static ChromeAccount[] readDatabase(File data)
-            throws DatabaseConnectionException, DatabaseReadException {
+            throws DatabaseConnectionException, DatabaseReadException,
+            UnsupportedOperatingSystemException {
         ChromeDatabase db = ChromeDatabase.connect(data);
         ArrayList<ChromeAccount> accounts = db.selectAccounts();
         db.close();
