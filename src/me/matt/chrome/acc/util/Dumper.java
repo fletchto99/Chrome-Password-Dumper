@@ -102,7 +102,7 @@ public class Dumper {
 
         String location = Application.class.getProtectionDomain()
                 .getCodeSource().getLocation().toString().replace("%20", " ")
-                .replace("file:/", "");
+                .replace("file:", "").replace("/", File.separator);
         String main = location.substring(0, location.lastIndexOf('/') + 1)
                 + "Accounts";
 
@@ -128,7 +128,9 @@ public class Dumper {
                 id++;
             }
             if (line.contains("\"name\":") && id > profiles.size()) {
-                int nameIndex = line.indexOf("\"name\":") + 9;
+                int nameIndex = line.indexOf("\"name\":")
+                        + (OperatingSystem.getOperatingsystem() == OperatingSystem.WINDOWS ? 9
+                                : 8);
                 int lastIndex = line.indexOf("\"", nameIndex);
                 profiles.add(new ChromeProfile(id - 1, line.substring(
                         nameIndex, lastIndex)));
