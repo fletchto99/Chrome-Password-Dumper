@@ -19,13 +19,15 @@ public class ChromeSecurity {
              * (perhaps I can spoof being google chrome and load their keychain auth? Is this something done
              * locally?
              */
+            host = host.replace("https://", "").replace("http://", "");
             String command = "security find-internet-password -gs "
-                    + host.substring(0, host.indexOf('/'));
+                    + host.substring(0, host.indexOf('/') > 0 ? host.indexOf('/') : host.length()) + " -w";
+            System.out.println("Command: " + command);
             Process result = Runtime.getRuntime().exec(command);
             BufferedReader out = new BufferedReader(new InputStreamReader(
                     result.getInputStream()));
             String password = out.readLine();
-            System.out.println("pwd: " + password);
+            out.close();
             return password;
         } catch (IOException e) {
             return "";
