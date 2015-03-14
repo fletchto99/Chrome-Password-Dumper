@@ -12,7 +12,7 @@ public class ChromeAccount {
         this.username = username;
         this.URL = URL;
         this.decryptedPassword = new String(
-                Crypt32Util.cryptUnprotectData(encryptedPassword));
+                Crypt32Util.cryptUnprotectData(encryptedPassword));// TODO: Figure out mac encryption
     }
 
     public String getUsername() {

@@ -1,8 +1,6 @@
 package me.matt.chrome.acc.util;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,8 +15,10 @@ import me.matt.chrome.acc.Application;
 import me.matt.chrome.acc.exception.ChromeNotFoundException;
 import me.matt.chrome.acc.exception.DatabaseConnectionException;
 import me.matt.chrome.acc.exception.DatabaseReadException;
+import me.matt.chrome.acc.exception.UnsupportedOperatingSystemException;
 import me.matt.chrome.acc.wrappers.ChromeAccount;
 import me.matt.chrome.acc.wrappers.ChromeDatabase;
+import me.matt.chrome.acc.wrappers.ChromeProfile;
 
 public class Dumper {
 
@@ -64,10 +64,15 @@ public class Dumper {
     }
 
     public static Dumper dumpAccounts() throws DatabaseConnectionException,
-            DatabaseReadException, IOException {
-        Path chromeInstall = Paths.get(System.getProperty("user.home")
-                + File.separator
-                + "AppData\\Local\\Google\\Chrome\\User Data\\");
+            DatabaseReadException, IOException,
+            UnsupportedOperatingSystemException, InstantiationException {
+        OperatingSystem os = OperatingSystem.getOperatingsystem();
+        if (os == OperatingSystem.UNKNOWN) {
+            throw new UnsupportedOperatingSystemException(
+                    System.getProperty("os.name")
+                            + " is not supported by this application!");
+        }
+        Path chromeInstall = Paths.get(os.getChromePath());
 
         File chromeInfo = new File(chromeInstall.toString(), "Local State");
 
@@ -76,22 +81,24 @@ public class Dumper {
                     "Google chrome intallation not found.");
         }
 
-        int profileCount = 0;
-        ArrayList<String> names = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(chromeInfo));
-        String line;
-        while ((line = br.readLine()) != null) {
-            if ((line.contains("Profile ") || line.contains("Default"))
-                    && line.endsWith(": {")) {
-                profileCount++;
-            }
-            line = line.trim();
-            if (line.contains("\"name\":") && profileCount > names.size()) {
-                names.add(line.substring(line.indexOf("\"", 6) + 1,
-                        line.lastIndexOf("\"")));
-            }
+        ArrayList<ChromeProfile> profiles;;
+        String[] infoLines = Files.readAllLines(Paths.get(chromeInfo.toURI()))
+                .toArray(new String[] {});
+        switch (OperatingSystem.getOperatingsystem()) {
+            case WINDOWS:
+                profiles = readProfiles(infoLines);
+                break;
+            case MAC:
+                String line = infoLines[0];
+                String lines[] = line.split("\\{|\\}");
+                profiles = readProfiles(lines);
+                break;
+            default:
+                throw new UnsupportedOperatingSystemException(
+                        System.getProperty("os.name")
+                                + " is not supported by this application!");
+
         }
-        br.close();
 
         String location = Application.class.getProtectionDomain()
                 .getCodeSource().getLocation().toString().replace("%20", " ")
@@ -100,14 +107,36 @@ public class Dumper {
                 + "Accounts";
 
         HashMap<File, ChromeAccount[]> accounts = new HashMap<File, ChromeAccount[]>();
-        for (int i = 0; i < profileCount; i++) {
+        for (ChromeProfile profile : profiles) {
+            System.out.println("Profile Path: " + profile.getPath());
+            System.out.println("Profile Name: " + profile.getName());
             File loginData = new File(chromeInstall.toString() + File.separator
-                    + (i > 0 ? "Profile " + i : "Default"), "Login Data");
-            accounts.put(new File(main, "Accounts - " + names.get(i) + ".txt"),
-                    readDatabase(loginData));
+                    + profile.getPath(), "Login Data");
+            accounts.put(new File(main, "Accounts - " + profile.getName()
+                    + ".txt"), readDatabase(loginData));
         }
-
+        if (profiles.size() < 1) {
+            throw new InstantiationException("No chrome profiles found!");
+        }
         return new Dumper(accounts);
+    }
+
+    private static ArrayList<ChromeProfile> readProfiles(String[] infoLines) {
+        ArrayList<ChromeProfile> profiles = new ArrayList<>();
+        int id = 0;
+        for (String line : infoLines) {
+            line = line.trim();
+            if (line.startsWith(",\"Profile ") || line.contains("\"Default\":")) {//TODO: Find a way to parse for every os
+                id++;
+            }
+            if (line.contains("\"name\":") && id > profiles.size()) { //TODO: Does this still work on windows?
+                int nameIndex = line.indexOf("\"name\":") + 8;
+                int lastIndex = line.indexOf("\"", nameIndex);
+                profiles.add(new ChromeProfile(id - 1, line.substring(
+                        nameIndex, lastIndex)));
+            }
+        }
+        return profiles;
     }
 
     private static ChromeAccount[] readDatabase(File data)
