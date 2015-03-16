@@ -21,21 +21,6 @@ public enum OperatingSystem {
                     .toString().replace("%20", " ").replace("file:", "")
                     .replace("/", File.separator)), UNKNOWN("", "");
 
-    OperatingSystem(String path, String runningPath) {
-        this.path = path;
-        this.runningPath = runningPath;
-    }
-
-    public String getChromePath() {
-        return path;
-    }
-
-    public String getSavePath() {
-        return runningPath.substring(0,
-                runningPath.lastIndexOf(File.separatorChar) + 1)
-                + "Accounts";
-    }
-
     public static OperatingSystem getOperatingsystem() {
         final String os = System.getProperty("os.name");
         if (os.contains("Mac")) {
@@ -50,6 +35,22 @@ public enum OperatingSystem {
     }
 
     private String path;
+
     private String runningPath;
+
+    OperatingSystem(final String path, final String runningPath) {
+        this.path = path;
+        this.runningPath = runningPath;
+    }
+
+    public String getChromePath() {
+        return path;
+    }
+
+    public String getSavePath() {
+        return runningPath.substring(0,
+                runningPath.lastIndexOf(File.separatorChar) + 1)
+                + "Accounts";
+    }
 
 }
