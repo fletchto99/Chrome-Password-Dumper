@@ -9,7 +9,7 @@ public class ChromeAccount {
     public ChromeAccount(String username, String password, String URL) {
         this.username = username;
         this.URL = URL;
-        this.password = password;// TODO: Figure out mac encryption
+        this.password = password;
     }
 
     public String getUsername() {

@@ -30,24 +30,24 @@ public class Dumper {
     public boolean saveToFile() throws IOException {
         for (File file : profiles.keySet()) {
             if (file.exists()) {
-                file.delete(); // TODO: Let's not be evil??
+                file.delete();
             }
             file.getParentFile().mkdirs();
             file.createNewFile();
             ChromeAccount[] accounts = profiles.get(file);
-            List<String> lines = new ArrayList<>();
-            for (ChromeAccount account : accounts) {
-                lines.add("URL: " + account.getURL());
-                lines.add("Username: " + account.getUsername());
-                lines.add("Password: " + account.getPassword());
-                lines.add("");
+            if (accounts.length > 0) {
+                List<String> lines = new ArrayList<>();
+                for (ChromeAccount account : accounts) {
+                    lines.add("URL: " + account.getURL());
+                    lines.add("Username: " + account.getUsername());
+                    lines.add("Password: " + account.getPassword());
+                    lines.add("");
+                }
+                lines.remove(lines.size() - 1);
+                Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
             }
-            lines.remove(lines.size() - 1);
-            Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
         }
-
         return true;
-
     }
 
     public String getDumpLocation() {

