@@ -2,20 +2,20 @@ package me.matt.chrome.acc.wrappers;
 
 public class ChromeProfile {
 
-    private String name;
-    private int id;
+    private final String name;
+    private final int id;
 
-    public ChromeProfile(int id, String name) {
+    public ChromeProfile(final int id, final String name) {
         this.id = id;
         this.name = name;
     }
 
-    public String getPath() {
-        return id > 0 ? "Profile " + id : "Default";
-    }
-
     public String getName() {
         return name;
+    }
+
+    public String getPath() {
+        return id > 0 ? "Profile " + id : "Default";
     }
 
 }

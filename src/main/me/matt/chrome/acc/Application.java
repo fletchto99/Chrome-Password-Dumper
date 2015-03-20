@@ -12,15 +12,15 @@ import me.matt.chrome.acc.util.Dumper;
 
 public class Application {
 
-    public static void main(String[] args) throws ClassNotFoundException,
+    public static void main(final String[] args) throws ClassNotFoundException,
             InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         String message;
-        boolean silent = args.length > 0 ? args[0].equalsIgnoreCase("silent")
-                : false;
+        final boolean silent = args.length > 0 ? args[0]
+                .equalsIgnoreCase("silent") : false;
         try {
-            Dumper d = Dumper.dumpAccounts();
+            final Dumper d = Dumper.dumpAccounts();
             message = d.saveToFile() ? "Finished dumping " + d.getDumpSize()
                     + " accounts from " + d.getAmountOfProfiles()
                     + " profiles to " + d.getDumpLocation()

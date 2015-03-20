@@ -2,26 +2,27 @@ package me.matt.chrome.acc.wrappers;
 
 public class ChromeAccount {
 
-    private String username;
-    private String URL;
-    private String password;
+    private final String username;
+    private final String URL;
+    private final String password;
 
-    public ChromeAccount(String username, String password, String URL) {
+    public ChromeAccount(final String username, final String password,
+            final String URL) {
         this.username = username;
         this.URL = URL;
-        this.password = password;// TODO: Figure out mac encryption
+        this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPassword() {
+        return password;
     }
 
     public String getURL() {
         return URL;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUsername() {
+        return username;
     }
 
 }
