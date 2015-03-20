@@ -49,12 +49,23 @@
 		<finalName>${finalName}</finalName>
 		<plugins>  
 			<plugin>  
+				<groupId>org.apache.maven.plugins</groupId>  
+				<artifactId>maven-compiler-plugin</artifactId>  
+				<version>3.2</version>  
+				<inherited>true</inherited>  
+				<configuration>  
+					<source>1.8</source>  
+					<target>1.8</target>  
+				</configuration>  
+			</plugin>  
+			<plugin>  
 				<artifactId>maven-assembly-plugin</artifactId>  
 				<configuration>  
 					<archive>  
 						<manifest>  
 							<mainClass>me.matt.chrome.acc.Application</mainClass>  
 						</manifest>  
+						<addMavenDescriptor>false</addMavenDescriptor>
 					</archive>  
 					<descriptorRefs>  
 						<descriptorRef>jar-with-dependencies</descriptorRef>  
@@ -69,16 +80,6 @@
 						</goals>  
 					</execution>  
 				</executions>  
-			</plugin>  
-			<plugin>  
-				<groupId>org.apache.maven.plugins</groupId>  
-				<artifactId>maven-compiler-plugin</artifactId>  
-				<version>3.2</version>  
-				<inherited>true</inherited>  
-				<configuration>  
-					<source>1.8</source>  
-					<target>1.8</target>  
-				</configuration>  
 			</plugin>  
 		</plugins> 
 	</build>
