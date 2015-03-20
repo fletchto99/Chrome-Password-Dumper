@@ -1,10 +1,11 @@
 language: java
 jdk:
 - oraclejdk8
+before_install: mvn install -DskipTests=true -DfinalName=Dumper-$TRAVIS_TAG
 deploy:
   provider: releases
   api_key:
     secure: CbqCFi+Csjvhv5DJYcvNMzVdkCFnIuiG3M3cstzSZzmVQGg3Dh1NOXTzm3TJyVoJZAogbm+UAnsgMrMhPZcQRlHKP53SO2lYfBkDrVH+mttBOdWuEkF4TRUo6Smb41FwO1LpGERlxTYtArDMiQrRE1laRL7rXTTJKUS5xpwuwL4=
-  file: Dumper.jar
+  file: target/Dumper-$TRAVIS_TAG.jar
   on:
     tags: true

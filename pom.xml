@@ -40,12 +40,5 @@
 
 	<build>
 		<finalName>Dumper</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-			</plugin>
-		</plugins>
 	</build>
 </project>
