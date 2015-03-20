@@ -43,8 +43,4 @@
 			<version>${sqllite.version}</version>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<finalName>Dumper</finalName>
-	</build>
 </project>
