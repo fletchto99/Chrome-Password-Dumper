@@ -19,6 +19,13 @@
         </license>
     </licenses>
 	
+	<repositories>
+	    <repository>
+            <id>sqllite-repo</id>
+            <url>http://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/</url>
+        </repository>
+	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>

@@ -2,7 +2,6 @@ language: java
 jdk:
 - oraclejdk8
 before_install: mvn install -DskipTests=true -DfinalName=Dumper-$TRAVIS_TAG
-before_deploy: mvn deploy:deploy-file -Durl=file://$TRAVIS_BUILD_DIR/dependencies/ -Dfile=sqlite-jdbc.jar -DgroupId=org.xerial -DartifactId=sqlite-jdbc -Dpackaging=jar -Dversion=3.7.15-SNAPSHOT
 deploy:
   provider: releases
   api_key:
