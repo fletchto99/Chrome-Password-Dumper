@@ -3,7 +3,7 @@
     <groupId>me.matt.chrome.acc</groupId>
     <artifactId>Application</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>Chrome Password Dumper</name>
 
 	<properties>
