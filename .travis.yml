@@ -5,7 +5,7 @@ deploy:
   provider: releases
   api_key:
     secure: CbqCFi+Csjvhv5DJYcvNMzVdkCFnIuiG3M3cstzSZzmVQGg3Dh1NOXTzm3TJyVoJZAogbm+UAnsgMrMhPZcQRlHKP53SO2lYfBkDrVH+mttBOdWuEkF4TRUo6Smb41FwO1LpGERlxTYtArDMiQrRE1laRL7rXTTJKUS5xpwuwL4=
- file: target/Chrome_Password_Dumper-$TRAVIS_TAG.jar
+file: target/Chrome_Password_Dumper-$TRAVIS_TAG.jar
   skip_cleanup: true
   on:
     tags: true
