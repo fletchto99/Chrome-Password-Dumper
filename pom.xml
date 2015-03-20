@@ -47,5 +47,39 @@
 	
 	<build>
 		<finalName>${finalName}</finalName>
+		<plugins>  
+			<plugin>  
+				<artifactId>maven-assembly-plugin</artifactId>  
+				<configuration>  
+					<archive>  
+						<manifest>  
+							<mainClass>me.matt.chrome.acc.Application</mainClass>  
+						</manifest>  
+					</archive>  
+					<descriptorRefs>  
+						<descriptorRef>jar-with-dependencies</descriptorRef>  
+					</descriptorRefs>  
+				</configuration>  
+				<executions>  
+					<execution>  
+						<id>make-assembly</id>  
+						<phase>package</phase>  
+						<goals>  
+							<goal>single</goal>  
+						</goals>  
+					</execution>  
+				</executions>  
+			</plugin>  
+			<plugin>  
+				<groupId>org.apache.maven.plugins</groupId>  
+				<artifactId>maven-compiler-plugin</artifactId>  
+				<version>3.2</version>  
+				<inherited>true</inherited>  
+				<configuration>  
+					<source>1.8</source>  
+					<target>1.8</target>  
+				</configuration>  
+			</plugin>  
+		</plugins> 
 	</build>
 </project>
