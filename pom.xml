@@ -21,7 +21,7 @@
 	
 	<repositories>
 	    <repository>
-            <id>sqllite-repo</id>
+            <id>sqlite-jdbc-repo</id>
             <url>http://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/</url>
         </repository>
 	</repositories>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>${jna.version}</version>
+			<version>${sqllite.version}</version>
 		</dependency>
 	</dependencies>
 
