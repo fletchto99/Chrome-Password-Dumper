@@ -1,30 +1,33 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>me.matt.chrome.acc</groupId>
-    <artifactId>Application</artifactId>
-    <version>1.0.0</version>
-    <packaging>jar</packaging>
-    <name>Chrome_Password_Dumper</name>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>me.matt.chrome.acc</groupId>
+	<artifactId>Application</artifactId>
+	<name>Chrome_Password_Dumper</name>
+	<version>1.0.0</version>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jna.version>4.1.0</jna.version>
+		<jdk.version>1.8</jdk.version>
 		<sqllite.version>3.8.7</sqllite.version>
 		<finalName>${project.name}-${project.version}</finalName>
+		<jna.version>4.1.0</jna.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license</url>
-        </license>
-    </licenses>
-	
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license</url>
+		</license>
+	</licenses>
+
 	<repositories>
-	    <repository>
-            <id>sqlite-jdbc-repo</id>
-            <url>http://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/</url>
-        </repository>
+		<repository>
+			<id>sqlite-jdbc-repo</id>
+			<url>http://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -44,42 +47,48 @@
 			<version>${sqllite.version}</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>${finalName}</finalName>
-		<plugins>  
-			<plugin>  
-				<artifactId>maven-assembly-plugin</artifactId>  
-				<configuration>  
-					<archive>  
-						<manifest>  
-							<mainClass>me.matt.chrome.acc.Application</mainClass>  
-						</manifest>  
-					</archive>  
-					<descriptorRefs>  
-						<descriptorRef>jar-with-dependencies</descriptorRef>  
-					</descriptorRefs>  
-				</configuration>  
-				<executions>  
-					<execution>  
-						<id>make-assembly</id>  
-						<phase>package</phase>  
-						<goals>  
-							<goal>single</goal>  
-						</goals>  
-					</execution>  
-				</executions>  
-			</plugin>  
-			<plugin>  
-				<groupId>org.apache.maven.plugins</groupId>  
-				<artifactId>maven-compiler-plugin</artifactId>  
-				<version>3.2</version>  
-				<inherited>true</inherited>  
-				<configuration>  
-					<source>1.8</source>  
-					<target>1.8</target>  
-				</configuration>  
-			</plugin>  
-		</plugins> 
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>me.matt.chrome.acc.Application</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>
