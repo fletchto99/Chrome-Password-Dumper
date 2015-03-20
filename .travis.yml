@@ -1,10 +1,10 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 deploy:
   provider: releases
-  api_key: "189a3547ddd6b96395c4f5f674acd7886947172f"
-  file: "1.0.0-SNAPSHOT.jar"
-  skip_cleanup: true
+  api_key:
+    secure: CbqCFi+Csjvhv5DJYcvNMzVdkCFnIuiG3M3cstzSZzmVQGg3Dh1NOXTzm3TJyVoJZAogbm+UAnsgMrMhPZcQRlHKP53SO2lYfBkDrVH+mttBOdWuEkF4TRUo6Smb41FwO1LpGERlxTYtArDMiQrRE1laRL7rXTTJKUS5xpwuwL4=
+  file: Dumper.jar
   on:
-    tags: true
+    tags: true    repo: fletchto99/Chrome-Password-Dumper
