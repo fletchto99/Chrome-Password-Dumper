@@ -20,6 +20,12 @@
         </license>
     </licenses>
 	
+    <repositories>
+		<id>project.local</id>
+        <name>project</name>
+        <url>file:${project.basedir}/repo</url>
+	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
