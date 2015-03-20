@@ -1,4 +1,4 @@
-# Chrome Password Dumper [![Build Status](https://travis-ci.org/fletchto99/Chrome-Password-Dumper.svg?branch=master)](https://travis-ci.org/fletchto99/Chrome-Password-Dumper)
+# Chrome Password Dumper [![Build Status](https://travis-ci.org/fletchto99/Chrome-Password-Dumper.svg?branch=master)](https://travis-ci.org/fletchto99/Chrome-Password-Dumper)[![Dependency Status](https://www.versioneye.com/user/projects/550ba567a80b5fba7900018f/badge.svg?style=flat)](https://www.versioneye.com/user/projects/550ba567a80b5fba7900018f)
 
 Chrome password dumper is a program used to recover lost saved passwords in google chrome, without the requirement of a master password.
 
