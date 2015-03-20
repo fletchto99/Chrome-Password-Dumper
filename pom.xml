@@ -4,13 +4,13 @@
     <artifactId>Application</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>Chrome Password Dumper</name>
+    <name>Chrome_Password_Dumper</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jna.version>4.1.0</jna.version>
 		<sqllite.version>3.7.2</sqllite.version>
-		<finalName>${project.artifactId}-${project.version}</finalName>
+		<finalName>${project.name}-${project.version}</finalName>
 	</properties>
 
     <licenses>
